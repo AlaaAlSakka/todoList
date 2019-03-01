@@ -1,11 +1,8 @@
-import java.util.Scanner;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 
-public class Task implements Comparable<Task>{
+public class Task implements Comparable<Task>, Serializable {
 
     private String project;
     private String title;
