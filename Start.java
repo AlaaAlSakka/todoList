@@ -1,16 +1,16 @@
-
-
+import java.io.*;
 import java.util.Scanner;
 public class Start
 {
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
 
     {
         new Start().myMethod();
+
     }
 
-    public void myMethod ()
+    public void myMethod () throws Exception
     {
         TaskList taskList =new TaskList();
         Task task= new Task();
@@ -34,7 +34,10 @@ public class Start
             System.out.println("(7) Show tasks according to due date ");
             System.out.println("(8) Show tasks according to title ");
             System.out.println("(9) Show tasks according to a selected project ");
-            System.out.println("(0) Exit ");
+            System.out.println("(10) Save");
+            System.out.println("(11) Load ");
+
+                System.out.println("(0) Exit ");
             choice = input.nextLine();
             switch (choice) {
                 case "0":
@@ -46,7 +49,7 @@ public class Start
                     break;
                 case "2":
                     System.out.println("Remove a task");
-                    taskList.RemoveTask();
+                    taskList.removeTask();
                     break;
                 case "3":
                     System.out.println("Update a task as done");
@@ -77,9 +80,14 @@ public class Start
                     System.out.println("Enter a project name to see all the tasks for it ");
                     taskList.showProjectTasks();
                     break;
-
-
-
+                case "10":
+                    System.out.println("Save ");
+                    taskList.save();
+                    break;
+                case "11":
+                    System.out.println("Load ");
+                    taskList.load();
+                    break;
 
 
                 default:
@@ -93,4 +101,7 @@ public class Start
         while (true);
 
     }
+
+
+
 }

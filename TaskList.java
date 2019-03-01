@@ -2,19 +2,24 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.io.*;
 
 
 
 
-public class TaskList {
+public class TaskList implements Serializable {
 
-    public ArrayList<Task> taskList;
+    public static ArrayList<Task> taskList;
     public ArrayList<Task> doneList = new ArrayList<>();
     Task done = new Task();
+    private static final String filepath = "//Users//alaa/Desktop//todoList//file";
+    private static final long serialVersionUID = 1L;
 
-    public TaskList() {
-        taskList = new ArrayList<>();
-    }
+    private FileHandler fileHandler = new FileHandler();
+
+     public TaskList() throws Exception {
+         taskList = load(); //new ArrayList<>();
+     }
 
     public void addTask() {
         Task task = new Task();
@@ -25,57 +30,34 @@ public class TaskList {
         System.out.println("Enter the task you want to add");
         task.setTitle(scanner.nextLine());
         System.out.println("Enter the due date of this task in this format: dd/MM/yyyy  ");
-
-
-
-        String date = scanner.nextLine();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-//boolean df = false;
-
-        //  while (df =false) {
-
-
-            try {
-
-                LocalDate parse = LocalDate.parse(date, formatter);
-                task.setDueDate(parse);
-            } catch (DateTimeParseException exc) {
-                System.out.printf("Enter the right format for the data dd/MM/yyyy ");
-            }
-
-
-
-
+        LocalDate date = checkingDF();
+        task.setDueDate(date);
         task.setStatus(isDone);
         taskList.add(task);
-
-
-/*
-        String input = null;
-        try {
-            DateTimeFormatter f =
-                    DateTimeFormatter.ofPattern("MMM d yyyy");
-            LocalDate d = LocalDate.parse(input, f);
-            System.out.printf("%s%n", d);
-        }
-        catch (DateTimeParseException exc) {
-            System.out.printf("%s is not parsable!%n", input);
-            throw exc;      // Rethrow the exception.
-        }
-
-      /*
-      try {
-            LocalDate parse = LocalDate.parse(date, formatter);
-          //Fail ("Should have failed");
-        } catch (DateTimeParseException ex) {
-            // expected
-        }
-
-         */
     }
 
 
-    public void RemoveTask() {
+    public LocalDate checkingDF() {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String date = scanner.nextLine();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            try {
+                LocalDate parse = LocalDate.parse(date, formatter);
+
+                if (LocalDate.now().compareTo(parse) <= 0) {
+                    return parse;
+                } else if (LocalDate.now().compareTo(parse) > 0)
+                    System.out.println("This date is an old date please enter a new date dd/MM/yyyy");
+
+            } catch (DateTimeParseException exc) {
+                System.out.printf("Enter the right format for the data dd/MM/yyyy ");
+            }
+        }
+    }
+
+
+    public void removeTask() {
         String t;
         Scanner scanner = new Scanner(System.in);
         t = scanner.nextLine();
@@ -101,7 +83,6 @@ public class TaskList {
                 done.status();
                 String isDone = "Done";
                 r.setStatus(isDone);
-                //it.remove();
                 System.out.println(r.getTitle() + " is done");
                 return;
             }
@@ -126,10 +107,8 @@ public class TaskList {
                 String isDone = "notDone";
                 r.setTitle(scanner.nextLine());
                 System.out.println("Enter the due date of this task in this format: dd/MM/yyyy ");
-                String date = scanner.nextLine();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                LocalDate localDate = LocalDate.parse(date, formatter);
-                r.setDueDate(localDate);
+                LocalDate date = checkingDF();
+                r.setDueDate(date);
                 taskList.add(r);
             }
         }
@@ -140,7 +119,6 @@ public class TaskList {
         for (Task task : taskList) {
             System.out.println(task);
         }
-
     }
 
 
@@ -158,62 +136,54 @@ public class TaskList {
         for (Object task : dateList) {
             System.out.println(task);
         }
-
     }
 
     public void listbyTitle() {
         taskList.stream()
                 .sorted(new TaskComparator())
                 .forEach(x -> System.out.println(x.getTitle() + "-------- project: " + x.getProject() + "--------" + x.getDueDate() + "--------" + x.getStatus()));
-
-
     }
 
 
     public void showProjectTasks() {
-
         ArrayList projectList = (ArrayList) taskList.clone();
         String p;
         Scanner scanner = new Scanner(System.in);
         p = scanner.nextLine();
         Iterator<Task> it = projectList.iterator();
-        while (it.hasNext()) {
+        boolean finds = false;
+        while (it.hasNext())
+        {
             Task r = it.next();
             if (p.equals(r.getProject())) {
-                {
-                    System.out.println(r);
-                }
+                System.out.println(r);
+                finds = true;
             }
+        }
+        if (!finds) {
+            System.out.println("There is no project with this name");
+
         }
     }
 
 
-}
-
-
-
-  /*  public void listbyProject(String projectName)
+    public void save()
     {
-        taskList.stream()
-                .filter(x -> x.getProject().equalsIgnoreCase(projectName))
-//                .sorted((s1, s2) -> s1.compareToIgnoreCase(s2))
-                .forEach(x -> System.out.println(x ));
-        //System.out.println(getDetails);
+       fileHandler.saveArrayList(taskList);
     }
 
-  public void listbyTitle()
+    public ArrayList<Task> load() throws Exception
     {
-//        taskList.stream()
-//                .map(x -> x.getTitle())
-//                .sorted((s1, s2) -> s1.compareToIgnoreCase(s2))
-//                .forEach(x -> System.out.print(x);}
-/*
-        for (Object task : taskList)
+        ArrayList<Task> test = fileHandler.loadFromFile();
+
+        for (Task task : test)
         {
             System.out.println(task);
         }
-
+        return test;
     }
-*/
+}
+
+
 
 

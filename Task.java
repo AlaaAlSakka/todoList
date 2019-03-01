@@ -7,24 +7,26 @@ import java.time.LocalDate;
 
 public class Task implements Comparable<Task>{
 
-    // isDone, title, project, date
-    //  public TaskList project;
-
+    private String project;
     private String title;
     private LocalDate dueDate;
     private boolean isDone = false;
-    private String project;
     private String status;
-    //public ArrayList<Task> doneList = new ArrayList<>();
-   // TaskList taskList =new TaskList();
 
 
-   /*public Task(String title, String dueDate) {
+    public Task(String project, String title, LocalDate date, String isDone)
+    {
         this.title = title;
-        this.dueDate = dueDate;
-        this.isDone = false;
+        this.project = project;
+        this.dueDate = date;
+        //TODO convert string to boolean
+        this.status = isDone;
+
     }
-*/
+
+    public Task()
+    {
+    }
 
 
     public String getTitle()
@@ -80,7 +82,13 @@ public class Task implements Comparable<Task>{
     @Override
     public String toString()
     {
-        return "Project: " + project + "--------" +"Task:" + title + "-------- " + dueDate + "--------" + status;
+        return "Project: " + project + "--------" +"Task:" + title + "--------" + dueDate + "--------" + status;
+    }
+
+    public String toWriteInFile()
+    {
+        return "" + project + "--------" +"" + title + "--------" + dueDate + "--------" + status;
+
     }
 
 
