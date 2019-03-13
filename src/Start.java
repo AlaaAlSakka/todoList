@@ -1,20 +1,20 @@
-
+import data.TaskList;
 
 import java.util.Scanner;
 public class Start
 {
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
+
     {
         new Start().myMethod();
+
     }
 
-    public void myMethod ()
+    public void myMethod () throws Exception
     {
         TaskList taskList =new TaskList();
-        //TaskList doneList = new TaskList();
-        Task task= new Task();
-
+       // data.Task task= new data.Task()
 
 
         Scanner input = new Scanner(System.in);
@@ -22,16 +22,17 @@ public class Start
 
         do
             {
-            //Splash screen with options
-            System.out.println("----------------------------------------\nPlease Choose an option");
-            System.out.println("");
+            System.out.println(taskList.checkTask());
+            System.out.println("----------------------------------------\nPlease Choose an option\n");
             System.out.println("(1) Add a task ");
             System.out.println("(2) Remove a task ");
             System.out.println("(3) Update a task as done ");
-            System.out.println("(4) List all tasks ");
-            System.out.println("(5) List all done tasks ");
-            System.out.println("(6) List all tasks according to due date ");
-            System.out.println("(7) List all tasks according to title ");
+            System.out.println("(4) Edit a task ");
+            System.out.println("(5) Show tasks ");
+            System.out.println("(6) Show tasks according to due date ");
+            System.out.println("(7) Show tasks according to a selected project ");
+            System.out.println("(8) Save");
+            System.out.println("(9) Load ");
             System.out.println("(0) Exit ");
             choice = input.nextLine();
             switch (choice) {
@@ -40,39 +41,42 @@ public class Start
                     System.exit(0);
                     break;
                 case "1":
-                    //choice = input.nextLine();
-                    taskList.addTask();
+                    taskList.addTask(taskList.getTaskDetail());
                     break;
                 case "2":
                     System.out.println("Remove a task");
-                    //choice = input.nextLine();
-                    taskList.RemoveTask();
+                    taskList.removeTask();
                     break;
                 case "3":
                     System.out.println("Update a task as done");
-                    //choice = input.nextLine();
                     taskList.markasDone();
                     break;
+
                 case "4":
-                    System.out.println("List for all tasks");
-                    //choice = input.nextLine();
-                    taskList.listTasks();
+                    System.out.println("Edit a task ");
+                    taskList.editTask();
                     break;
                 case "5":
-                    System.out.println("List for all done tasks ");
-                    //choice = input.nextLine();
-                    taskList.listDoneTasks();
+                    System.out.println("List for all tasks");
+                    taskList.listTasks();
                     break;
                 case "6":
                     System.out.println("List for all tasks according to due date ");
-                    //choice = input.nextLine();
                     taskList.listbyDate();
                     break;
                 case "7":
-                    System.out.println("List for all tasks according to title ");
-                    //choice = input.nextLine();
-                    taskList.listbyTitle();
+                    System.out.println("Enter a project name to see all the tasks for it ");
+                    taskList.showProjectTasks();
                     break;
+                case "8":
+                    System.out.println("Save ");
+                    taskList.save();
+                    break;
+                case "9":
+                    System.out.println("Load ");
+                    taskList.load();
+                    break;
+
 
                 default:
                     System.out.println("Please enter a valid choice.");
@@ -85,4 +89,7 @@ public class Start
         while (true);
 
     }
+
+
+
 }
